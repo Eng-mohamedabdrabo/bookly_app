@@ -1,0 +1,60 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader("UTF-8") { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
+if (flutterVersionCode == null) {
+    flutterVersionCode = "1"
+}
+
+def flutterVersionName = localProperties.getProperty("flutter.versionName")
+if (flutterVersionName == null) {
+    flutterVersionName = "1.0"
+}
+
+android {
+    namespace = "com.example.bookly_app" // Adjusted for 'bookly_app'
+    compileSdk = 34 // Ensure you're using a stable SDK
+
+    compileOptions {
+        // Update these to match Java 23 compatibility
+        sourceCompatibility = JavaVersion.VERSION_20 // Since Java 23 is very new, using VERSION_20 for now
+        targetCompatibility = JavaVersion.VERSION_20
+    }
+
+    defaultConfig {
+        applicationId = "com.example.bookly_app" // Adjusted for 'bookly_app'
+        minSdk = 21 // Minimum SDK version should remain the same
+        targetSdk = 34 // Target SDK version remains 34
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true // Enable code shrinking for release builds
+            shrinkResources true // Enable resource shrinking
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug // Adjust as needed for your signing config
+        }
+    }
+
+    kotlinOptions {
+        // Update the JVM target to a compatible version for Java 23
+        jvmTarget = "20" // Kotlin doesn't support JVM 23 directly yet, so set it to the latest compatible version
+    }
+}
+
+flutter {
+    source = "../.." // Flutter module location remains the same
+}
